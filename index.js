@@ -190,6 +190,9 @@ function rangesToObject(ranges, text, prefix) {
 		    key = prefix + "_" + key
 		}
 		var val = rangeToBuffer(range.children[2], text).join("");
+		if(val.indexOf("''") >= 0){
+		   val = val.replace("''", "'");
+		}
 		obj[key] = val;
 	}
 
