@@ -177,7 +177,7 @@ function rangeToBuffer(range, text) {
 
 	return buffer;
 }
-function rangesToObject(ranges, text) {
+function rangesToObject(ranges, text, prefix) {
 	var obj = Object.create(null); // Creates to a true hash map
 
 	for(var i = 0; i < ranges.length; i++) {
@@ -186,6 +186,9 @@ function rangesToObject(ranges, text) {
 		if(range.type !== "key-value") { continue; }
 
 		var key = rangeToBuffer(range.children[0], text).join("");
+		if(prefix){
+		    key = prefix + "_" + key
+		}
 		var val = rangeToBuffer(range.children[2], text).join("");
 		obj[key] = val;
 	}
@@ -402,10 +405,10 @@ function createEditor(/*path, options, callback*/) {
 	});
 }
 
-function parse(text) {
+function parse(text, prefix) {
 	text = text.toString();
 	var ranges = stringToRanges(text);
-	return rangesToObject(ranges, text);
+	return rangesToObject(ranges, text, prefix);
 }
 
 function read(path, callback) {
